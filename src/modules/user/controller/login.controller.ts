@@ -12,8 +12,8 @@ export class UsersController {
   @Post('login')
   async login(@Body() login: LoginUserDto, @Res() res: Response) {
     const result = await this.usersService.login(login);
-
-    if (!result) {
+    console.log("controller:"+result);
+    if (result == null) {
       return res.status(401).json({ message: "Login ou Senha incorretos" });
     }
 

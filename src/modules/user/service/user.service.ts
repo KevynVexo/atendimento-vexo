@@ -3,27 +3,31 @@ import { LoginUserDto } from '../../user/dto/login.user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schema/user.schema';
-import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto'; // Importa o módulo nativo do Node.js
 
 @Injectable()
 export class UsersService {
-  private users = []; // Simulando um banco de dados
-
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async login(loginDto: LoginUserDto): Promise<User | null> {
-    const { login, password } = loginDto; // Extrai login e password do DTO
-    console.log("login:"+login);
-    const user = await this.userModel.findOne({ login }).exec(); // Busca pelo login
-    console.log("usuario:"+user);
+    const { login, password } = loginDto; // Extrai login e senha
+    console.log("login:", login);
+  
+    const user = await this.userModel.findOne({ login }).exec(); // Busca o usuário
+    console.log("usuario:", user);
   
     if (!user) {
       return null; // Retorna null se não encontrar o usuário
     }
   
-    const isPasswordValid = await bcrypt.compare(password, user.password); // Compara a senha
+    // Hash da senha fornecida no login
+    const hashpsw = this.hashPassword(password).trim();
   
-    if (!isPasswordValid) {
+    // Comparação direta dos hashes (também aplicando trim nos valores)
+    console.log("Hash gerado:", hashpsw);
+    console.log("Hash do banco:", user.password.trim());  // Use trim no hash armazenado
+  
+    if (hashpsw !== user.password.trim()) {
       return null; // Retorna null se a senha estiver errada
     }
   
@@ -31,4 +35,7 @@ export class UsersService {
   }
   
 
+  hashPassword(password: string): string {
+    return crypto.createHash('sha256').update(password).digest('hex'); // Gera um hash fixo
+  }
 }
