@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UsersModule } from './modules/user/users.module';
+import {UsersController} from './modules/user/controller/login.controller';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
+  imports: [
+    MongooseModule.forRoot('mongodb+srv://cluster10298.pr4ct.mongodb.net/serviceVexo'), // Altere para sua URL
+    UsersModule,
+  ],
+  controllers: [AppController,UsersController],
   providers: [AppService],
 })
+
 export class AppModule {}
