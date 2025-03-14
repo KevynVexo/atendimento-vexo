@@ -13,8 +13,9 @@ export class UsersService {
 
   async login(loginDto: LoginUserDto): Promise<User | null> {
     const { login, password } = loginDto; // Extrai login e password do DTO
-  
+    console.log("login:"+login);
     const user = await this.userModel.findOne({ login }).exec(); // Busca pelo login
+    console.log("usuario:"+user);
   
     if (!user) {
       return null; // Retorna null se não encontrar o usuário

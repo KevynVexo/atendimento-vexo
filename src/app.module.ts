@@ -7,7 +7,7 @@ import {UsersController} from './modules/user/controller/login.controller';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://Cluster10298:bFNBeUZUX1p8@cluster10298.pr4ct.mongodb.net/'), // Altere para sua URL
+    MongooseModule.forRoot('mongodb+srv://Cluster10298:bFNBeUZUX1p8@cluster10298.pr4ct.mongodb.net/serviceVexo'), // Altere para sua URL
     UsersModule,
   ],
   controllers: [AppController,UsersController],
